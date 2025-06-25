@@ -340,6 +340,15 @@ export function KnowledgeBase() {
   const [loading, setLoading] = useState(false)
   const { projects, loading: projectsLoading } = useProjects()
 
+  // Set first project as default when projects load
+  useEffect(() => {
+    if (projects.length > 0 && !selectedProject) {
+      setSelectedProject(projects[0].id)
+    }
+  }, [projects, selectedProject])
+
+  const currentProject = projects.find(p => p.id === selectedProject)
+
   // Simulate loading state for content
   useEffect(() => {
     if (currentProject) {
@@ -353,7 +362,6 @@ export function KnowledgeBase() {
     }
   }, [currentProject, activeTab])
 
-  // Filter content based on active tab and search term
   const getFilteredContent = () => {
     switch (activeTab) {
       case 'context':
@@ -392,14 +400,6 @@ export function KnowledgeBase() {
 
   const filteredContent = getFilteredContent()
 
-  // Set first project as default when projects load
-  useEffect(() => {
-    if (projects.length > 0 && !selectedProject) {
-      setSelectedProject(projects[0].id)
-    }
-  }, [projects, selectedProject])
-
-  const currentProject = projects.find(p => p.id === selectedProject)
 
   const getStatusBadge = (status: string) => {
     if (status === 'investigating') {
