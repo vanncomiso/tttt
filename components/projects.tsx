@@ -163,7 +163,41 @@ export function Projects() {
             </div>
 
             {/* Projects Grid */}
-            {filteredProjects.length > 0 ? (
+            {loading ? (
+              /* Skeleton Loading State */
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-12">
+                {Array.from({ length: 8 }).map((_, index) => (
+                  <Card
+                    key={index}
+                    className="bg-sidebar-accent border-sidebar-border overflow-hidden animate-pulse"
+                  >
+                    {/* Skeleton Preview */}
+                    <div className="bg-sidebar-border aspect-[4/3] flex items-center justify-center">
+                      <div className="w-16 h-16 bg-sidebar-foreground/20 rounded-full"></div>
+                    </div>
+
+                    {/* Skeleton Info */}
+                    <div className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <div className="w-6 h-6 rounded-full bg-sidebar-foreground/20 flex-shrink-0"></div>
+                          <div className="min-w-0 flex-1">
+                            <div className="h-4 bg-sidebar-foreground/20 rounded w-20 mb-1"></div>
+                            <div className="h-3 bg-sidebar-foreground/10 rounded w-12"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Skeleton Title */}
+                      <div className="h-4 bg-sidebar-foreground/20 rounded w-3/4 mb-2"></div>
+
+                      {/* Skeleton Badge */}
+                      <div className="h-5 bg-sidebar-foreground/10 rounded w-20"></div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : filteredProjects.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-12">
                 {filteredProjects.map((project) => (
                   <Card

@@ -337,7 +337,21 @@ export function KnowledgeBase() {
     category: 'Software',
     file: null as File | null
   })
+  const [loading, setLoading] = useState(false)
   const { projects, loading: projectsLoading } = useProjects()
+
+  // Simulate loading state for content
+  useEffect(() => {
+    if (currentProject) {
+      setLoading(true)
+      // Simulate API call delay
+      const timer = setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [currentProject, activeTab])
 
   // Filter content based on active tab and search term
   const getFilteredContent = () => {
@@ -1150,7 +1164,17 @@ export function KnowledgeBase() {
             </div>
 
             {/* Main Content Area */}
-            {!currentProject ? (
+            {projectsLoading ? (
+              /* Project Loading Skeleton */
+              <Card className="bg-sidebar-accent border-sidebar-border p-12">
+                <div className="text-center animate-pulse">
+                  <div className="bg-sidebar-foreground/20 p-4 rounded-lg inline-block mb-4 w-16 h-16"></div>
+                  <div className="h-6 bg-sidebar-foreground/20 rounded w-48 mx-auto mb-2"></div>
+                  <div className="h-4 bg-sidebar-foreground/10 rounded w-64 mx-auto mb-6"></div>
+                  <div className="h-10 bg-sidebar-foreground/20 rounded w-40 mx-auto"></div>
+                </div>
+              </Card>
+            ) : !currentProject ? (
               <Card className="bg-sidebar-accent border-sidebar-border p-12">
                 <div className="text-center">
                   <div className="bg-sidebar p-4 rounded-lg inline-block mb-4">
@@ -1178,6 +1202,151 @@ export function KnowledgeBase() {
                   )}
                 </div>
               </Card>
+            ) : loading ? (
+              /* Content Loading Skeleton */
+              <div className="space-y-6">
+                {activeTab === 'context' && (
+                  <>
+                    {/* Add Context Button Skeleton */}
+                    <div className="flex justify-center">
+                      <Card className="bg-sidebar-accent border-sidebar-border p-8 max-w-md mx-auto animate-pulse">
+                        <div className="text-center">
+                          <div className="w-16 h-16 bg-sidebar-foreground/20 rounded-full mx-auto mb-4"></div>
+                          <div className="h-5 bg-sidebar-foreground/20 rounded w-32 mx-auto mb-2"></div>
+                          <div className="h-4 bg-sidebar-foreground/10 rounded w-48 mx-auto"></div>
+                        </div>
+                      </Card>
+                    </div>
+                    
+                    {/* Context Items Skeleton */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                      {Array.from({ length: 6 }).map((_, index) => (
+                        <Card
+                          key={index}
+                          className="bg-sidebar-accent border-sidebar-border p-6 animate-pulse"
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 bg-sidebar-foreground/20 rounded-lg flex-shrink-0"></div>
+                              <div className="flex-1 min-w-0">
+                                <div className="h-4 bg-sidebar-foreground/20 rounded w-32 mb-1"></div>
+                                <div className="h-3 bg-sidebar-foreground/10 rounded w-20"></div>
+                              </div>
+                            </div>
+                            <div className="w-8 h-8 bg-sidebar-foreground/10 rounded"></div>
+                          </div>
+
+                          <div className="h-4 bg-sidebar-foreground/10 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-sidebar-foreground/10 rounded w-3/4 mb-4"></div>
+
+                          {/* Tags skeleton */}
+                          <div className="flex flex-wrap gap-1 mb-4">
+                            {Array.from({ length: 3 }).map((_, tagIndex) => (
+                              <div key={tagIndex} className="h-5 bg-sidebar-foreground/10 rounded w-16"></div>
+                            ))}
+                          </div>
+
+                          {/* Footer skeleton */}
+                          <div className="flex items-center justify-between pt-4 border-t border-sidebar-border">
+                            <div className="h-3 bg-sidebar-foreground/10 rounded w-20"></div>
+                            <div className="h-3 bg-sidebar-foreground/10 rounded w-16"></div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </>
+                )}
+                
+                {(activeTab === 'issues' || activeTab === 'inquiries') && (
+                  <div className="space-y-4">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <Card
+                        key={index}
+                        className="bg-sidebar-accent border-sidebar-border p-6 animate-pulse"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 bg-sidebar-foreground/20 rounded-lg flex-shrink-0"></div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="h-5 bg-sidebar-foreground/20 rounded w-3/4"></div>
+                              <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                                <div className="h-5 bg-sidebar-foreground/10 rounded w-16"></div>
+                                <div className="h-5 bg-sidebar-foreground/10 rounded w-20"></div>
+                              </div>
+                            </div>
+                            <div className="h-4 bg-sidebar-foreground/10 rounded w-full mb-2"></div>
+                            <div className="h-4 bg-sidebar-foreground/10 rounded w-2/3 mb-4"></div>
+                            <div className="flex items-center justify-between">
+                              <div className="h-3 bg-sidebar-foreground/10 rounded w-32"></div>
+                              <div className="h-3 bg-sidebar-foreground/10 rounded w-24"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+                
+                {activeTab === 'products' && (
+                  <div className="space-y-6">
+                    {/* Add Product Button Skeleton */}
+                    <div className="flex justify-center">
+                      <Card className="bg-sidebar-accent border-sidebar-border p-8 max-w-md mx-auto animate-pulse">
+                        <div className="text-center">
+                          <div className="w-16 h-16 bg-sidebar-foreground/20 rounded-full mx-auto mb-4"></div>
+                          <div className="h-5 bg-sidebar-foreground/20 rounded w-32 mx-auto mb-2"></div>
+                          <div className="h-4 bg-sidebar-foreground/10 rounded w-48 mx-auto"></div>
+                        </div>
+                      </Card>
+                    </div>
+                    
+                    {/* Products Grid Skeleton */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                      {Array.from({ length: 6 }).map((_, index) => (
+                        <Card
+                          key={index}
+                          className="bg-sidebar-accent border-sidebar-border p-6 animate-pulse"
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 bg-sidebar-foreground/20 rounded-lg flex-shrink-0"></div>
+                              <div className="flex-1 min-w-0">
+                                <div className="h-4 bg-sidebar-foreground/20 rounded w-32 mb-1"></div>
+                                <div className="flex items-center gap-2">
+                                  <div className="h-5 bg-sidebar-foreground/20 rounded w-16"></div>
+                                  <div className="h-5 bg-sidebar-foreground/10 rounded w-20"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-8 h-8 bg-sidebar-foreground/10 rounded"></div>
+                          </div>
+
+                          <div className="h-4 bg-sidebar-foreground/10 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-sidebar-foreground/10 rounded w-3/4 mb-4"></div>
+
+                          {/* Stats skeleton */}
+                          <div className="space-y-2 mb-4">
+                            <div className="flex items-center justify-between">
+                              <div className="h-3 bg-sidebar-foreground/10 rounded w-12"></div>
+                              <div className="h-3 bg-sidebar-foreground/10 rounded w-16"></div>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <div className="h-3 bg-sidebar-foreground/10 rounded w-16"></div>
+                              <div className="h-3 bg-sidebar-foreground/10 rounded w-12"></div>
+                            </div>
+                          </div>
+
+                          {/* Footer skeleton */}
+                          <div className="flex items-center justify-between pt-4 border-t border-sidebar-border">
+                            <div className="h-5 bg-sidebar-foreground/10 rounded w-20"></div>
+                            <div className="h-3 bg-sidebar-foreground/10 rounded w-24"></div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : filteredContent.length === 0 ? (
               <Card className="bg-sidebar-accent border-sidebar-border p-12">
                 <div className="text-center">
